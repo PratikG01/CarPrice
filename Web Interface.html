@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Used Car Price Prediction</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        select, input {
+            width: 200px;
+            margin: 10px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #prediction-result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Used Car Price Prediction</h1>
+
+    <form id="prediction-form">
+        <label for="car-model">Car Model:</label>
+        <select id="car-model" name="car-model"></select><br><br>
+
+        <label for="year">Year:</label>
+        <select id="year" name="year"></select><br><br>
+
+        <label for="location">Location:</label>
+        <select id="location" name="location"></select><br><br>
+
+        <label for="fuel-type">Fuel Type:</label>
+        <select id="fuel-type" name="fuel-type"></select><br><br>
+
+        <label for="transmission">Transmission:</label>
+        <select id="transmission" name="transmission"></select><br><br>
+
+        <label for="mileage">Mileage (km/l):</label>
+        <input type="number" id="mileage" name="mileage" required placeholder="Enter mileage"><br><br>
+
+        <label for="engine">Engine (cc):</label>
+        <input type="number" id="engine" name="engine" required placeholder="Enter engine capacity"><br><br>
+
+        <label for="power">Power (BHP):</label>
+        <input type="number" id="power" name="power" required placeholder="Enter power"><br><br>
+
+        <label for="seats">Seats:</label>
+        <input type="number" id="seats" name="seats" required min="2" max="8" placeholder="Enter number of seats"><br><br>
+
+        <label for="new-price">New Price ($):</label>
+        <input type="number" id="new-price" name="new-price" required placeholder="Enter new price"><br><br>
+
+        <label for="kilometers-driven">Kilometers Driven:</label>
+        <input type="number" id="kilometers-driven" name="kilometers-driven" required placeholder="Enter kilometers driven"><br><br>
+
+        <button type="submit">Predict Price</button>
+    </form>
+
+    <div id="prediction-result"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    
+    <script>
+        function initializeSelect2() {
+            $('select').select2({
+                placeholder: 'Select an option',
+                allowClear: true
+            });
+        }
+
+        function populateDropdown(elementId, options) {
+            const dropdown = document.getElementById(elementId);
+            options.forEach(option => {
+                const optionElement = document.createElement("option");
+                optionElement.value = option;
+                optionElement.textContent = option;
+                dropdown.appendChild(optionElement);
+            });
+        }
+
+        fetch("/get_car_data")
+            .then(response => response.json())
+            .then(data => {
+                populateDropdown("car-model", data.car_models);
+                populateDropdown("year", data.years);
+                populateDropdown("location", data.locations);
+                populateDropdown("fuel-type", data.fuel_types);
+                populateDropdown("transmission", data.transmissions);
+
+                initializeSelect2();
+            });
+
+        document.getElementById("prediction-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const formData = {
+                "Name": document.getElementById("car-model").value,
+                "Year": document.getElementById("year").value,
+                "Location": document.getElementById("location").value,
+                "Fuel_Type": document.getElementById("fuel-type").value,
+                "Transmission": document.getElementById("transmission").value,
+                "Mileage": document.getElementById("mileage").value,
+                "Engine": document.getElementById("engine").value,
+                "Power": document.getElementById("power").value,
+                "Seats": document.getElementById("seats").value,
+                "New_Price": document.getElementById("new-price").value,
+                "Kilometers_Driven": document.getElementById("kilometers-driven").value
+            };
+
+            fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("prediction-result").innerText = `Predicted Price: ₹${data.predicted_price}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("prediction-result").innerText = "Error predicting price.";
+            });
+        });
+    </script>
+</body>
+</html>
