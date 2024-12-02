@@ -1,4 +1,5 @@
 import joblib
+import numpy as np
 import pandas as pd
 from sklearn.calibration import LabelEncoder
 from sklearn.model_selection import train_test_split
@@ -21,8 +22,28 @@ for column in categorical_columns:
 X_train = train_df.drop(columns=['Price'])
 y_train = train_df['Price']
 
+if hasattr(X_train, "isnull"):
+    print("Missing values found:", X_train.isnull().sum().sum())
+    X_train = X_train.fillna(0)  
+else:
+    print("Missing values found:", np.isnan(X_train).sum())
+    X_train = np.nan_to_num(X_train) 
+
+    X_train = X_train.select_dtypes(include=[np.number]) 
+
+print(f"X_train type: {type(X_train)}")
+print(f"X_train shape: {X_train.shape}")
+print(X_train.head() if hasattr(X_train, "head") else X_train[:5])
+
 scaler = StandardScaler()
+try:
+    X_train_scaled = scaler.fit_transform(X_train)
+except Exception as e:
+    print(f"Error during scaling: {e}")
 X_train_scaled = scaler.fit_transform(X_train)
+
+print("Scaled Data (first 5 rows):", X_train_scaled[:5])
+
 
 model = LinearRegression()
 model.fit(X_train_scaled, y_train)
