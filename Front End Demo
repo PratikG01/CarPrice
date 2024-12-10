@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Used Car Price Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Used Car Price Prediction</h2>
+        <form id="predictionForm">
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name">Car Name</label>
+                <select id="name">
+                    <option value="">-- Select or Type --</option>
+                    <option value="Maruti Alto K10 LXI CNG">Maruti Alto K10 LXI CNG</option>
+                    <option value="Toyota Innova Crysta">Toyota Innova Crysta</option>
+                    <option value="Hyundai i20 Magna">Hyundai i20 Magna</option>
+                </select>
+                <input type="text" placeholder="Type if not listed" id="nameInput">
+            </div>
+
+            <!-- Location -->
+            <div class="form-group">
+                <label for="location">Location</label>
+                <select id="location">
+                    <option value="">-- Select or Type --</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Coimbatore">Coimbatore</option>
+                </select>
+                <input type="text" placeholder="Type if not listed" id="locationInput">
+            </div>
+
+            <!-- Year -->
+            <div class="form-group">
+                <label for="year">Year</label>
+                <input type="number" id="year" placeholder="Enter year">
+            </div>
+
+            <!-- Kilometers Driven -->
+            <div class="form-group">
+                <label for="kilometers">Kilometers Driven</label>
+                <input type="number" id="kilometers" placeholder="Enter kilometers">
+            </div>
+
+            <!-- Fuel Type -->
+            <div class="form-group">
+                <label for="fuel">Fuel Type</label>
+                <select id="fuel">
+                    <option value="">-- Select or Type --</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="CNG">CNG</option>
+                </select>
+                <input type="text" placeholder="Type if not listed" id="fuelInput">
+            </div>
+
+            <!-- Transmission -->
+            <div class="form-group">
+                <label for="transmission">Transmission</label>
+                <select id="transmission">
+                    <option value="">-- Select or Type --</option>
+                    <option value="Manual">Manual</option>
+                    <option value="Automatic">Automatic</option>
+                </select>
+                <input type="text" placeholder="Type if not listed" id="transmissionInput">
+            </div>
+
+            <!-- Owner Type -->
+            <div class="form-group">
+                <label for="owner">Owner Type</label>
+                <select id="owner">
+                    <option value="">-- Select or Type --</option>
+                    <option value="First">First</option>
+                    <option value="Second">Second</option>
+                    <option value="Third">Third</option>
+                </select>
+                <input type="text" placeholder="Type if not listed" id="ownerInput">
+            </div>
+
+            <!-- Mileage -->
+            <div class="form-group">
+                <label for="mileage">Mileage</label>
+                <input type="text" id="mileage" placeholder="Enter mileage">
+            </div>
+
+            <!-- Engine -->
+            <div class="form-group">
+                <label for="engine">Engine</label>
+                <input type="text" id="engine" placeholder="Enter engine (e.g., 1497 CC)">
+            </div>
+
+            <!-- Power -->
+            <div class="form-group">
+                <label for="power">Power</label>
+                <input type="text" id="power" placeholder="Enter power (e.g., 118 bhp)">
+            </div>
+
+            <!-- Seats -->
+            <div class="form-group">
+                <label for="seats">Seats</label>
+                <input type="number" id="seats" placeholder="Enter number of seats">
+            </div>
+
+            <button type="button" onclick="predictPrice()">Predict Price</button>
+        </form>
+
+        <div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+    </div>
+
+    <script>
+        function predictPrice() {
+            const name = document.getElementById("name").value || document.getElementById("nameInput").value;
+            const location = document.getElementById("location").value || document.getElementById("locationInput").value;
+            const year = document.getElementById("year").value;
+            const kilometers = document.getElementById("kilometers").value;
+            const fuel = document.getElementById("fuel").value || document.getElementById("fuelInput").value;
+            const transmission = document.getElementById("transmission").value || document.getElementById("transmissionInput").value;
+            const owner = document.getElementById("owner").value || document.getElementById("ownerInput").value;
+            const mileage = document.getElementById("mileage").value;
+            const engine = document.getElementById("engine").value;
+            const power = document.getElementById("power").value;
+            const seats = document.getElementById("seats").value;
+
+            // Simulated prediction for demo purposes
+            const price = Math.random() * 20 + 5; // Random price between 5 and 25 lakhs
+
+            document.getElementById("result").innerText = `Predicted Price: ₹${price.toFixed(2)} Lakh`;
+        }
+    </script>
+</body>
+</html>
